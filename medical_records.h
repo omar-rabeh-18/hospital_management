@@ -1,6 +1,7 @@
 #ifndef MEDICAL_RECORDS_H
 #define MEDICAL_RECORDS_H
 
+
 #include <QLineEdit>
 #include <QDialog>
 #include <QTextStream>
@@ -8,6 +9,9 @@
 #include <QDebug>
 #include <QFile>
 #include "ui_medical_records.h"
+#include <QComboBox>
+
+
 
 namespace Ui {
 class medical_records;
@@ -22,11 +26,15 @@ public:
     ~medical_records();
 
 private slots:
-    void nameLineEdit_textChanged(const QString &text);
-    void ageLineEdit_textChanged(const QString &text);
-    void diseaseLineEdit_textChanged(const QString &text);
-    void testLineEdit_textChanged(const QString &text);
+    void on_nameLineEdit_textChanged(const QString &text);
+    void on_genderComboBox_currentIndexChanged(int index); // Slot for gender combo box
+    void on_ageLineEdit_textChanged(const QString &text);
+    void on_diseaseLineEdit_textChanged(const QString &text);
+    void on_testLineEdit_textChanged(const QString &text);
     void exportToFile();
+
+
+
 
 private:
 
@@ -36,7 +44,7 @@ private:
     QString disease;
     QString test;
 
-
+    QComboBox *genderComboBox;
 
     Ui::medical_records *ui;
 };

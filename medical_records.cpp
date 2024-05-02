@@ -7,19 +7,18 @@ medical_records::medical_records(QWidget *parent)
 {
     ui->setupUi(this);
 
+    genderComboBox = ui->genderComboBox; // Initialize genderComboBox
+
     // Updates gender variable
-    connect(genderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [this](int index){
-        gender = genderComboBox->itemText(index);
-    });
+    connect(genderComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &medical_records::on_genderComboBox_currentIndexChanged);
+
 
     // Line edits signals become connected to corresponding slots
-    connect(nameLineEdit, &QLineEdit::textChanged, this, &medical_records::nameLineEdit_textChanged);
-    connect(ageLineEdit, &QLineEdit::textChanged, this, &medical_records::nameLineEdit_textChanged);
-    connect(diseaseLineEdit, &QLineEdit::textChanged, this, &medical_records::nameLineEdit_textChanged);
-    connect(testLineEdit, &QLineEdit::textChanged, this, &medical_records::nameLineEdit_textChanged);
+    ui->nameLineEdit->connect(ui->nameLineEdit, &QLineEdit::textChanged, this, &medical_records::on_nameLineEdit_textChanged);
+    ui->ageLineEdit->connect(ui->ageLineEdit, &QLineEdit::textChanged, this, &medical_records::on_ageLineEdit_textChanged);
+    ui->diseaseLineEdit->connect(ui->diseaseLineEdit, &QLineEdit::textChanged, this, &medical_records::on_diseaseLineEdit_textChanged);
+    ui->testLineEdit->connect(ui->testLineEdit, &QLineEdit::textChanged, this, &medical_records::on_testLineEdit_textChanged);
 
-    // Connects exportToFile slot to application exit signal
-    connect(qApp, &QCoreApplication::aboutToQuit, this, &medical_records::exportToFile);
 
 
     // Extracts information from the file and puts it back into its designated space
@@ -35,7 +34,7 @@ medical_records::medical_records(QWidget *parent)
         test = input.readLine();
 
         nameLineEdit->setText(name);
-        int index = genderComboBox->findText(gender);
+        int index = ui->genderComboBox->findText(gender);
         if (index != -1) {
             genderComboBox->setCurrentIndex(index);
         }
@@ -48,7 +47,8 @@ medical_records::medical_records(QWidget *parent)
         qDebug() << "Error occurred when opening file for reading";
     }
 
-
+    // Connects exportToFile slot to application exit signal
+    connect(qApp, &QCoreApplication::aboutToQuit, this, &medical_records::exportToFile);
 
 }
 
@@ -59,25 +59,31 @@ medical_records::~medical_records()
 }
 
 // Updates "name" variable when text changes
-void medical_records::nameLineEdit_textChanged(const QString &text)
+void medical_records::on_nameLineEdit_textChanged(const QString &text)
 {
     name = text;
 }
 
+// Updates "gender" variable when changed
+void medical_records::on_genderComboBox_currentIndexChanged(int index)
+{
+    gender = genderComboBox->itemText(index);
+}
+
 // Updates "age" variable when text changes
-void medical_records::ageLineEdit_textChanged(const QString &text)
+void medical_records::on_ageLineEdit_textChanged(const QString &text)
 {
     age = text;
 }
 
 // Updates "disease" variable when text changes
-void medical_records::diseaseLineEdit_textChanged(const QString &text)
+void medical_records::on_diseaseLineEdit_textChanged(const QString &text)
 {
     disease = text;
 }
 
 // Updates "test" variable when text changes
-void medical_records::testLineEdit_textChanged(const QString &text)
+void medical_records::on_testLineEdit_textChanged(const QString &text)
 {
     test = text;
 }
