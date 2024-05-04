@@ -11,15 +11,18 @@ CONFIG += c++17
 SOURCES += \
     appoinmentswindow.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    medical_records.cpp
 
 HEADERS += \
     appoinmentswindow.h \
-    mainwindow.h
+    mainwindow.h \
+    medical_records.h
 
 FORMS += \
     appoinmentswindow.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    medical_records.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
