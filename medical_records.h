@@ -1,52 +1,46 @@
 #ifndef MEDICAL_RECORDS_H
 #define MEDICAL_RECORDS_H
 
-
-#include <QLineEdit>
 #include <QDialog>
-#include <QTextStream>
-#include <QCoreApplication>
-#include <QDebug>
-#include <QFile>
-#include "ui_medical_records.h"
 #include <QComboBox>
+#include <QFile>
+#include <QDebug>
+#include <QCoreApplication>
 
+QT_BEGIN_NAMESPACE
+namespace Ui { class medical_records; }
+QT_END_NAMESPACE
 
-
-namespace Ui {
-class medical_records;
-}
-
-class medical_records : public QDialog, private Ui::medical_records
+class medical_records : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit medical_records(QWidget *parent = nullptr);
+    medical_records(const QString& username, QWidget *parent = nullptr);
     ~medical_records();
 
+signals:
+    void aboutToClose(); // Signal emitted when the window is about to close
+
+
+protected:
+    void closeEvent(QCloseEvent *event) override;
+
+
 private slots:
-    void on_nameLineEdit_textChanged(const QString &text);
-    void on_genderComboBox_currentIndexChanged(int index); // Slot for gender combo box
-    void on_ageLineEdit_textChanged(const QString &text);
-    void on_diseaseLineEdit_textChanged(const QString &text);
-    void on_testLineEdit_textChanged(const QString &text);
-    void exportToFile();
-
-
-
+    void onSaveButtonClicked();
+    void exportRecordsToFile();
+    void loadMedicalRecords(const QString& username);
+    void on_genderComboBox_currentIndexChanged(int index);
+    void removeSpaces(const QString& text);
 
 private:
-
-    QString name;
-    QString gender;
-    QString age;
-    QString disease;
-    QString test;
-
-    QComboBox *genderComboBox;
-
     Ui::medical_records *ui;
+    QString m_username;
+    QComboBox *genderComboBox;
+    QVector<QString> m_records;
+
+
 };
 
 #endif // MEDICAL_RECORDS_H
